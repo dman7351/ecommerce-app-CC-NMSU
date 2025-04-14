@@ -1,5 +1,4 @@
 services:
-  # Web app container (Flask + Gunicorn)
   web:
     build:
       context: .
@@ -7,7 +6,7 @@ services:
     volumes:
       - .:/app
     expose:
-      - "5000"  # Internal port, accessible to Nginx only
+      - "5000"
     environment:
       - DATABASE_URL=postgresql://dcarr:password@db/ecommerce_db
     depends_on:
@@ -15,7 +14,6 @@ services:
     networks:
       - ecommerce-network
 
-  # Database container (PostgreSQL)
   db:
     image: postgres:13
     container_name: ecommerce-db
@@ -34,9 +32,9 @@ services:
     container_name: ecommerce-nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./app:/app  # optional, for static files
+      - ./app:/app 
     ports:
-      - "80:80"  # Only Nginx binds to port 80 on the host
+      - "80:80"  
     depends_on:
       - web
     networks:
