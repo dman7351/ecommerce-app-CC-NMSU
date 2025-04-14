@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies needed to compile dependencies like psycopg2
+# Install system dependencies needed to compile dependencies
 RUN apk update && apk add --no-cache \
     gcc \
     musl-dev \
@@ -26,4 +26,4 @@ RUN pip install gunicorn
 COPY . .
 
 # Run the Flask app with Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["./entrypoint.sh"]
