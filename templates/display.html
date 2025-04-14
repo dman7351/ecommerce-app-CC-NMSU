@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Display Data</title>
+</head>
+<body>
+	<h1>Display Data</h1>
+
+	<!-- Form for selecting the table -->
+	<form method="POST">
+	<label for="table">Choose a table:</label>
+	<select name="table" id="table">
+		<option value="products">Products</option>
+		<option value="users">Users</option>
+		<option value="products_bought">Products Bought</option>
+	</select>
+	<button type="submit">Show Data</button>
+	</form>
+
+	{% if data %}
+	<h2>Data from {{ table.capitalize() }} Table:</h2>
+	<table border="1">
+		<thead>
+		<tr>
+			{% for header in headers %}
+				<th>{{ header }}</th>
+			{% endfor %}
+		</tr>
+		</thead>
+		<tbody>
+		{% for row in data %}
+			<tr>
+			{% if table == 'products' %}
+				<td>{{row.product_id}}</td>
+				<td>{{ row.name }}</td>
+				<td>{{ row.description }}</td>
+				<td>{{ row.manufacturer }}</td>
+				<td>{{ row.price }}</td>
+				<td>{{ row.inventory_count }}</td>
+			{% elif table == 'users' %}
+				<td>{{row.user_id}}</td>	
+				<td>{{ row.username }}</td>
+				<td>{{ row.password }}</td>
+				<td>{{ row.preferences }}</td>
+			{% elif table == 'products_bought' %}
+				<td>{{row.purchase_id}}</td>
+				<td>{{ row.username }}</td>
+				<td>{{ row.product_name }}</td>
+				<td>{{ row.quantity }}</td>
+				<td>{{ row.date_of_purchase }}</td>
+			{% endif %}
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+
+	<br>
+	<a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

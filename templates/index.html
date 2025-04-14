@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Welcome to E-commerce</title>
+</head>
+<body>
+	<h1>Welcome to the E-commerce App</h1>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				<ul>
+				{% for category, message in messages %}
+					<li class="{{ category }}">{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+	<p>Explore a wide range of stuff to do like uhm what you see below</p>
+	<a href="{{ url_for('display') }}">View Tables</a><br>
+	<a href="{{ url_for('add_data') }}">Add Data</a><br>
+	<a href="{{ url_for('delete_data') }}">Delete Data</a><br>
+</body>
+</html>

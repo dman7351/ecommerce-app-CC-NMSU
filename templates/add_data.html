@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add Data</title>
+	<script>
+		function showForm() {
+			// Get selected table
+			let selectedTable = document.getElementById("table").value;
+
+			// Hide all forms
+			document.getElementById("products_form").style.display = "none";
+			document.getElementById("users_form").style.display = "none";
+			document.getElementById("products_bought_form").style.display = "none";
+
+			// Show the selected form
+			if (selectedTable === "products") {
+				document.getElementById("products_form").style.display = "block";
+			} else if (selectedTable === "users") {
+				document.getElementById("users_form").style.display = "block";
+			} else if (selectedTable === "products_bought") {
+				document.getElementById("products_bought_form").style.display = "block";
+			}
+		}
+	</script>
+</head>
+<body>
+	<h1>Add Data</h1>
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			<ul>
+				{% for category, message in messages %}
+					<li class="{{ category}}">{{message}}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}	
+
+	<!-- Table selection dropdown -->
+	<label for="table">Choose a table:</label>
+	<select name="table" id="table" onchange="showForm()" required>
+		<option value="">Select a table</option>
+		<option value="products">Products</option>
+		<option value="users">Users</option>
+		<option value="products_bought">Products Bought</option>
+	</select>
+
+	<br><br>
+
+	<!-- Products Form -->
+	<form id="products_form" method="POST" style="display: none;">
+		<input type="hidden" name="table" value="products">
+		<label for="name">Product Name:</label>
+		<input type="text" id="name" name="name" required><br>
+
+		<label for="description">Description:</label>
+		<input type="text" id="description" name="description" required><br>
+
+		<label for="manufacturer">Manufacturer:</label>
+		<input type="text" id="manufacturer" name="manufacturer" required><br>
+
+		<label for="price">Price:</label>
+		<input type="number" id="price" name="price" step="0.01" required><br>
+
+		<label for="inventory_count">Inventory Count:</label>
+		<input type="number" id="inventory_count" name="inventory_count" required><br>
+
+		<button type="submit">Submit</button>
+	</form>
+
+	<!-- Users Form -->
+	<form id="users_form" method="POST" style="display: none;">
+		<input type="hidden" name="table" value="users">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required><br>
+
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required><br>
+
+		<label for="preferences">Preferences:</label>
+		<input type="text" id="preferences" name="preferences"><br>
+
+		<button type="submit">Submit</button>
+	</form>
+
+	<!-- Products Bought Form -->
+	<form id="products_bought_form" method="POST" style="display: none;">
+		<input type="hidden" name="table" value="products_bought">
+		<label for="user_id">User ID:</label>
+		<input type="number" id="user_id" name="user_id" required><br>
+
+		<label for="product_id">Product ID:</label>
+		<input type="number" id="product_id" name="product_id" required><br>
+
+		<label for="quantity">Quantity:</label>
+		<input type="number" id="quantity" name="quantity" required><br>
+
+		<label for="date_of_purchase">Date of Purchase:</label>
+		<input type="date" id="date_of_purchase" name="date_of_purchase" required><br>
+
+		<button type="submit">Submit</button>
+	</form>
+
+	<br>
+	<a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

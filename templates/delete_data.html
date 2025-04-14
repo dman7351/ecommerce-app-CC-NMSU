@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Delete Data</title>
+	<script>
+		function updateTableSelection() {
+			const selectedTable = document.getElementById("table").value;
+			window.location.href = `/delete_data?table=${selectedTable}`;
+		}
+
+		function confirmDeletion(event){
+			let confirmAction = confirm("Are you sure you want to delete this?");
+			if (!confirmAction){
+			event.preventDefault();
+			console.log("delete cancelled");
+			}			
+		}
+	</script>
+</head>
+<body>
+	<h1>Delete Data</h1>
+	
+	{% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                        <ul>
+                                {% for category, message in messages %}
+                                        <li class="{{ category}}">{{message}}</li>
+                                {% endfor %}
+                        </ul>
+                {% endif %}
+        {% endwith %}
+
+	<!-- Dropdown to select a table (URL update) -->
+	<label for="table">Choose a table:</label>
+	<select name="table" id="table" onchange="updateTableSelection()">
+		<option value="" disabled selected>Select a table</option>
+		<option value="products" {% if table == 'products' %}selected{% endif %}>Products</option>
+		<option value="users" {% if table == 'users' %}selected{% endif %}>Users</option>
+		<option value="products_bought" {% if table == 'products_bought' %}selected{% endif %}>Products Bought</option>
+	</select>
+
+	{% if data %}
+		<h2>Data from {{ table.capitalize() }} Table:</h2>
+		<table border="1">
+			<thead>
+			<tr>
+				{% for header in headers %}
+					<th>{{ header }}</th>
+				{% endfor %}
+			</tr>
+			</thead>
+			<tbody>
+				{% for row in data %}
+				<tr>
+					{% if table == 'products' %}
+						<td>{{ row.product_id }}</td>
+						<td>{{ row.name }}</td>
+						<td>{{ row.description }}</td>
+						<td>{{ row.manufacturer }}</td>
+						<td>{{ row.price }}</td>
+						<td>{{ row.inventory_count }}</td>
+					{% elif table == 'users' %}
+						<td>{{ row.user_id }}</td>
+						<td>{{ row.username }}</td>
+						<td>{{ row.password }}</td>
+						<td>{{ row.preferences }}</td>
+					{% elif table == 'products_bought' %}
+						<td>{{ row.purchase_id }}</td>
+						<td>{{ row.username }}</td>
+						<td>{{ row.product_name }}</td>
+						<td>{{ row.quantity }}</td>
+						<td>{{ row.date_of_purchase }}</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<form method="POST" onsubmit="confirmDeletion(event);">
+			<label for="id">Enter ID to delete:</label>
+			<input type="text" name="id" id="id" required>
+			<button type="submit">Delete</button>
+		</form>
+	{% endif %}
+
+	<br>
+	<a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>
